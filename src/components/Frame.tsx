@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useCallback, useState } from "react";
+import { GameState, createInitialState } from "~/lib/gameState";
 import sdk, {
   AddFrame,
   SignIn as SignInCore,
@@ -40,6 +41,11 @@ function ExampleCard() {
 
 export default function Frame() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
+  const [gameState, setGameState] = useState<GameState>(createInitialState());
+
+  const resetGame = useCallback(() => {
+    setGameState(createInitialState());
+  }, []);
   const [context, setContext] = useState<Context.FrameContext>();
 
   const [added, setAdded] = useState(false);
@@ -140,7 +146,21 @@ export default function Frame() {
         <h1 className="text-2xl font-bold text-center mb-4 text-gray-700 dark:text-gray-300">
           {PROJECT_TITLE}
         </h1>
-        <ExampleCard />
+        
+        <div className="flex flex-col gap-4">
+          <div className="p-4 border rounded">
+            <pre className="text-xs overflow-auto">
+              {JSON.stringify(gameState, null, 2)}
+            </pre>
+          </div>
+          
+          <button
+            onClick={resetGame}
+            className="bg-purple-500 text-white px-4 py-2 rounded"
+          >
+            Reset Game
+          </button>
+        </div>
       </div>
     </div>
   );
