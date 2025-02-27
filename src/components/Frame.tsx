@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useCallback, useState } from "react";
+import { GameCanvas } from "~/components/GameCanvas";
 import { GameState, createInitialState } from "~/lib/gameState";
 import sdk, {
   AddFrame,
@@ -147,19 +148,41 @@ export default function Frame() {
           {PROJECT_TITLE}
         </h1>
         
-        <div className="flex flex-col gap-4">
-          <div className="p-4 border rounded">
-            <pre className="text-xs overflow-auto">
-              {JSON.stringify(gameState, null, 2)}
-            </pre>
-          </div>
+        <div className="flex flex-col gap-4 items-center">
+          <GameCanvas 
+            gameState={gameState}
+            width={300}
+            height={400}
+          />
           
-          <button
-            onClick={resetGame}
-            className="bg-purple-500 text-white px-4 py-2 rounded"
-          >
-            Reset Game
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setGameState(prev => ({
+                ...prev,
+                playerX: Math.max(0, prev.playerX - 10)
+              }))}
+              className="bg-purple-500 text-white px-4 py-2 rounded"
+            >
+              ←
+            </button>
+            
+            <button
+              onClick={resetGame}
+              className="bg-purple-500 text-white px-4 py-2 rounded"
+            >
+              Reset
+            </button>
+
+            <button
+              onClick={() => setGameState(prev => ({
+                ...prev,
+                playerX: Math.min(260, prev.playerX + 10)
+              }))}
+              className="bg-purple-500 text-white px-4 py-2 rounded"
+            >
+              →
+            </button>
+          </div>
         </div>
       </div>
     </div>
